@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.http import HttpResponse
 import requests
-
 from BLACKOUT_API.settings import BOT_TOKEN
 
 # Create your views here.
@@ -15,6 +14,6 @@ def verifyQuota(request, userID, channelID, messageID):
     headers = {"Authorization": f"Bot {bot_token}"}
     response = requests.get(api_endpoint, headers=headers)
 
-    # return HttpResponse(response.json()['content']) - Httpresponse is not JSON serializable
-    return response.json()['content']
+    return HttpResponse(response.json()['content']) 
+    # return response.json()['content']
     # return JsonResponse({'userID': userID, 'channelID': channelID, 'messageID': messageID}, status=200)
