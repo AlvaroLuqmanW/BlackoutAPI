@@ -13,7 +13,13 @@ def verifyQuota(request, userID, channelID, messageID):
     api_endpoint = f"https://discord.com/api/v9/channels/{channel_id}/messages/{message_id}"
     headers = {"Authorization": f"Bot {bot_token}"}
     response = requests.get(api_endpoint, headers=headers)
+    message_content = response.json().get('content')
+    
+    if user_id in message_content:
+        return JsonResponse({'message': 'true'})
+    else:
+        return JsonResponse({'message': 'false'})
 
-    return HttpResponse(response.json()['content']) 
+    # return HttpResponse(response.json()['content']) 
     # return response.json()['content']
     # return JsonResponse({'userID': userID, 'channelID': channelID, 'messageID': messageID}, status=200)
