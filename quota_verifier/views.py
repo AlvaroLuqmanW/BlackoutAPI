@@ -5,20 +5,25 @@ import requests
 from BLACKOUT_API.settings import BOT_TOKEN
 
 # Create your views here.
-def verifyQuota(request, userID, channelID, messageID):
-    channel_id = channelID
-    message_id = messageID
-    user_id = userID
+def verifyQuota(request, event, userID, channelID, messageID):
+    divisionalEventChannelIDs = ['780627292434726922', '923455236809588778', '736609429167931463']
+    contractedEventChannelIDs = ['780623012390633492', '923455236809588778', '736609429167931463', '780623059009798144']
+
+    if event == 'divisional' and channelID not in divisionalEventChannelIDs:
+        return JsonResponse({'message': 'Invalid\nInvalid channel ID'})
+    if event == 'contracted' and channelID not in contractedEventChannelIDs:
+        return JsonResponse({'message': 'Invalid\nInvalid channel ID'})
+    
     bot_token = BOT_TOKEN
-    api_endpoint = f"https://discord.com/api/v9/channels/{channel_id}/messages/{message_id}"
+    api_endpoint = f"https://discord.com/api/v9/channels/{channelID}/messages/{messageID}"
     headers = {"Authorization": f"Bot {bot_token}"}
     response = requests.get(api_endpoint, headers=headers)
     message_content = response.json().get('content')
     
-    if user_id in message_content:
-        return JsonResponse({'message': 'true'})
+    if userID in message_content:
+        return JsonResponse({'message': 'Valid'})
     else:
-        return JsonResponse({'message': 'false'})
+        return JsonResponse({'message': 'Invalid\nUser not mentioned in event log'})
 
     # return HttpResponse(response.json()['content']) 
     # return response.json()['content']
