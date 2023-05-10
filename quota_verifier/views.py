@@ -19,6 +19,9 @@ def verifyQuota(request, event, userID, channelID, messageID):
     headers = {"Authorization": f"Bot {bot_token}"}
     response = requests.get(api_endpoint, headers=headers)
     message_content = response.json().get('content')
+
+    if message_content is None:
+        return JsonResponse({'message': 'Invalid\nInvalid Server ID'})
     
     if userID in message_content:
         return JsonResponse({'message': 'Valid'})
